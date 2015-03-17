@@ -1,0 +1,52 @@
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#steps {
+
+}
+
+section {
+  height: 100vh;
+  position: relative;
+}
+
+.container {
+  padding: 30px;
+}
+
+/* Step: Introduction
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+section:nth-child(1) {
+  background-color: #dfe276;
+}
+
+/* Step: Map
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#step-map-map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#step-map-hole {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-image: url('../images/circle-hole.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+
+  pointer-events: none;
+}
+
+/* Step: Overpass API
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+section:nth-child(3) {
+  background-color: #919ff2;
+}
