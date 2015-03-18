@@ -200,9 +200,15 @@ code {
 /* Step: Overpass API
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-
-.CodeMirror {
+#step-overpass-editor-container .CodeMirror {
   height: 135px;
+}
+
+/* Step: GeoJSON
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#step-geojson-editor-container .CodeMirror {
+  height: 400px;
 }
 
 /* Step: SVG

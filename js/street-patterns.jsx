@@ -56,10 +56,11 @@ var StepIntro = React.createClass({
           <div className="row">
             <h1>Maptime Amsterdam #5: Street Patterns</h1>
             <p></p>
-            <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Following along, and don&#39;t forget to click on all the links to read some background information!</p>
+            <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Follow along, and don&#39;t forget to click on all the links to read some background information!</p>
             <p>Beautiful patterns can emerge from a city&#39;s street network (<a href="http://www.fredfeddes.nl/">Fred Feddes</a> told us today that some of the patterns in the streets of Amsterdam are more than a 1000 years old), and by using only open data and open source tools, we can extract those patterns, and visualize and <i>physicalize</i> them.</p>
 
             <p>This tutorial was made by <a href="http://bertspaan.nl">Bert Spaan</a> for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
+            <p>On the next page, you can drag the map to find beautiful street patterns, or search for a specific place.</a>
           </div>
         </div>
         <div className="button-bottom">
@@ -168,7 +169,7 @@ var StepOverpass = React.createClass({
             <p>
             If you press Execute, the query below is sent to the Overpass API. You can use <a href="http://overpass-turbo.eu/">Overpass Turbo</a> to test the query yourself.
             </p>
-            <p>
+            <p id="step-overpass-editor-container">
               <textarea id="step-overpass-editor">
                 {this.query}
               </textarea>
@@ -212,6 +213,48 @@ var StepOverpass = React.createClass({
 
   }
 });
+
+
+
+var StepGeoJSON = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    var geojson = JSON.stringify(this.props.data.geojson, null, 2);
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h2>GeoJSON data from OpenStreetMap</h2>
+            <p>
+              We have data! (You could try to copy and paste the data into <a href="http://geojson.io/">geojson.io</a>.)
+            </p>
+            <p id="step-geojson-editor-container">
+              <textarea id="step-geojson-editor">
+                {geojson}
+              </textarea>
+            </p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Show this GeoJSON on the map!</button>
+        </div>
+      </section>
+    )
+  },
+
+  componentDidMount: function() {
+    this.editor = CodeMirror.fromTextArea(document.getElementById("step-geojson-editor"), {
+      lineNumbers: true,
+      mode: "application/json"
+    });
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({});
+  }
+});
+
 
 var StepGeoJSONMap = React.createClass({
   mixins: [StepMixin],
@@ -567,8 +610,7 @@ var steps = [
   { component: StepIntro, props: { color: "white"  } },
   { component: StepMap, props: { } },
   { component: StepOverpass, props: { } },
-  //{ component: StepGeoOverpassData, props: { } },
-  //StepGeoJSON
+  { component: StepGeoJSON, props: { } },
   { component: StepGeoJSONMap, props: { } },
   { component: StepTurfIntro, props: { } },
   { component: StepTurfBuffer, props: { } },
