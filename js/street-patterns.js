@@ -177,7 +177,7 @@ var StepOverpass = React.createClass({displayName: "StepOverpass",
           )
         ), 
         React.createElement("div", {className: "button-bottom"}, 
-          React.createElement("button", {onClick: this.onButtonClick}, "Execute (this may take a couple of seconds)!")
+          React.createElement("button", {onClick: this.onButtonClick}, "Execute! (This may take a couple of seconds...)")
         )
       )
     )
@@ -323,7 +323,7 @@ var StepTurfIntro = React.createClass({displayName: "StepTurfIntro",
           )
         ), 
         React.createElement("div", {className: "button-bottom"}, 
-          React.createElement("button", {onClick: this.onButtonClick}, "Compute (this, again, may take a couple of seconds)!")
+          React.createElement("button", {onClick: this.onButtonClick}, "Compute! (This, again, may take a couple of seconds...)")
         )
       )
     )
