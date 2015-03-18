@@ -60,7 +60,7 @@ var StepIntro = React.createClass({
             <p>Beautiful patterns can emerge from a city&#39;s street network (<a href="http://www.fredfeddes.nl/">Fred Feddes</a> told us today that some of the patterns in the streets of Amsterdam are more than a 1000 years old), and by using only open data and open source tools, we can extract those patterns, and visualize and <i>physicalize</i> them.</p>
 
             <p>This tutorial was made by <a href="http://bertspaan.nl">Bert Spaan</a> for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
-            <p>On the next page, you can drag the map to find beautiful street patterns, or search for a specific place.</p>
+            <p>On the next page, you can drag the map to find a street pattern you like, or search for a specific place.</p>
           </div>
         </div>
         <div className="button-bottom">
