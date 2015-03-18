@@ -108,7 +108,7 @@ h1 {
   font-weight: 800;
 }
 
-a, a:visited {
+a, a:visited, a:hover {
   color: rgb(34, 34, 34);
 }
 
@@ -197,7 +197,7 @@ h1, h2 {
 
 
 .CodeMirror {
-  height: 122px;
+  height: 135px;
 }
 
 /* Step: SVG
