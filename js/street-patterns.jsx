@@ -177,7 +177,7 @@ var StepOverpass = React.createClass({
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Execute!</button>
+          <button onClick={this.onButtonClick}>Execute (this may take a couple of seconds)!</button>
         </div>
       </section>
     )
@@ -323,7 +323,7 @@ var StepTurfIntro = React.createClass({
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Compute!</button>
+          <button onClick={this.onButtonClick}>Compute (this, again, may take a couple of seconds)!</button>
         </div>
       </section>
     )
