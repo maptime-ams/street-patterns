@@ -7,10 +7,11 @@ var Steps = React.createClass({
       {this.props.steps.slice(0, this.props.stepData.length).map(function(step, index) {
 
         var boundNextStep = _this.onNextStep.bind(_this, index);
-        return React.createElement(step, {
+        return React.createElement(step.component, {
           key: index,
           data: _this.props.stepData[index],
-          onNextStep: boundNextStep
+          onNextStep: boundNextStep,
+          backgroundColor: step.props.backgroundColor
         });
       })}
       </div>
@@ -31,19 +32,27 @@ var Steps = React.createClass({
   }
 });
 
+var StepMixin = {
+  componentDidMount: function() {
+    React.findDOMNode(this).style.backgroundColor = this.props.backgroundColor;
+  }
+}
+
+
 var StepIntro = React.createClass({
+  mixins: [StepMixin],
 
   render: function() {
     return (
       <section>
         <div className="container">
           <div className="row">
-            <h1>Hallo</h1>
+            <h1>Maptime Amsterdam #5: Street Patterns</h1>
             <p>hallotjes</p>
-            <p>
-              <button onClick={this.onButtonClick}>Ok!</button>
-            </p>
           </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
         </div>
       </section>
     )
@@ -55,17 +64,15 @@ var StepIntro = React.createClass({
 });
 
 var StepMap = React.createClass({
+  mixins: [StepMixin],
+
   render: function() {
     return (
       <section>
         <div id="step-map-map" className="map"/>
         <div id="step-map-hole" />
-        <div id="step-map-button">
-          <div className="container">
-            <div className="row">
-              <button onClick={this.onButtonClick}>Yes, I like these streets!</button>
-            </div>
-          </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Yes, I like these streets!</button>
         </div>
       </section>
     )
@@ -107,16 +114,18 @@ var StepMap = React.createClass({
 });
 
 var StepOverpass = React.createClass({
+  mixins: [StepMixin],
+
   render: function() {
     var radius = this.props.data.radius,
         center = this.props.data.center,
+        coordinates = center.geometry.coordinates,
         query = [
           "[out:json];",
-          "way[highway](around:" + radius + "," + center.geometry.coordinates.reverse().join(",") + ");",
+          "way[highway](around:" + radius + "," + [coordinates[1], coordinates[0]].join(",") + ");",
           "(._;>;);",
           "out;"
         ].join("\n");
-
 
     this.query = query;
 
@@ -131,10 +140,10 @@ var StepOverpass = React.createClass({
                 {this.query}
               </textarea>
             </p>
-            <p>
-              <button onClick={this.onButtonClick}>Ok!</button>
-            </p>
           </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
         </div>
       </section>
     )
@@ -144,6 +153,10 @@ var StepOverpass = React.createClass({
     this.editor = CodeMirror.fromTextArea(document.getElementById("step-overpass-editor"), {
       lineNumbers: true
     });
+  },
+
+  componentDidUpdate: function() {
+    this.editor.setValue(this.query);
   },
 
   onButtonClick: function() {
@@ -167,15 +180,14 @@ var StepOverpass = React.createClass({
 });
 
 var StepGeoJSON = React.createClass({
+  mixins: [StepMixin],
+
   render: function() {
     return (
       <section>
         <div id="step-geojson-map" className="map"/>
-        <div id="step-geojson-button" className="button-bottom">
-          <div className="row">
-            <button onClick={this.onButtonClick}>Hopsa!</button>
-            <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
-          </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Hopsa!</button>
         </div>
       </section>
     )
@@ -188,15 +200,16 @@ var StepGeoJSON = React.createClass({
       }),
       pointStyle = {},
       lineStyle = {
-        color: "black",
-        weight: 3,
-        opacity: 0.65
+        color: this.props.backgroundColor,
+        weight: 10,
+        opacity: 1
       },
       tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       tileLayer = L.tileLayer(tileUrl, {
-        opacity: 0.3
+        opacity: 0.2
       }).addTo(map),
       geojsonLayer = new L.geoJson(this.props.data.geojson, {
+        style: lineStyle,
         pointToLayer: function (feature, latlng) {
           return L.circleMarker(latlng, pointStyle);
         }
@@ -208,12 +221,13 @@ var StepGeoJSON = React.createClass({
     map.touchZoom.disable();
     map.scrollWheelZoom.disable();
 
-    var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
-            .html()
-            .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
-        b64 = btoa(svg);
-
-    d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
+    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
+    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
+    //         .html()
+    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
+    //     b64 = btoa(svg);
+    //
+    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
 
     this.map = map;
   },
@@ -224,14 +238,30 @@ var StepGeoJSON = React.createClass({
 });
 
 
+// #8dd3c7
+// #ffffb3
+// #bebada
+// #fb8072
+// #80b1d3
+// #fdb462
+// #b3de69
+// #fccde5
+// #d9d9d9
+// #bc80bd
+// #ccebc5
+// #ffed6f
+
 var steps = [
-  StepIntro,
-  StepMap,
-  StepOverpass,
-  StepGeoJSON,
+  { component: StepIntro, props: { backgroundColor: "#8dd3c7" } },
+  { component: StepMap, props: { backgroundColor: "#ffffb3" } },
+  { component: StepOverpass, props: { backgroundColor: "#bebada" } },
+  //{ component: StepGeoOverpassData, props: { backgroundColor: "#fb8072" } },
+  { component: StepGeoJSON, props: { backgroundColor: "#80b1d3" } },
   //StepGeoJSONMap
+  // StepTurfIntro
   // StepBuffer
   // StepIntersect
+  // StepSVGIntro
   // StepSVG
   // StepDone
 ];
