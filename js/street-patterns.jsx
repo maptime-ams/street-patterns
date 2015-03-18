@@ -58,7 +58,7 @@ var StepMap = React.createClass({
   render: function() {
     return (
       <section>
-        <div id="step-map-map" />
+        <div id="step-map-map" className="map"/>
         <div id="step-map-hole" />
         <div id="step-map-button">
           <div className="container">
@@ -80,8 +80,7 @@ var StepMap = React.createClass({
         center: [52.3404,4.9431]
       }),
       tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      tileLayer = L.tileLayer(tileUrl, {
-      }).addTo(map),
+      tileLayer = L.tileLayer(tileUrl).addTo(map),
       hash = new L.Hash(map);
 
     map.touchZoom.disable();
@@ -92,18 +91,78 @@ var StepMap = React.createClass({
   },
 
   onButtonClick: function() {
-    this.props.onNextStep({});
+    var center = this.map.getCenter();
+    this.props.onNextStep({
+      center: {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [center.lng, center.lat]
+        }
+      },
+      radius: 200
+    });
   }
 
 });
 
 var StepOverpass = React.createClass({
   render: function() {
+    var radius = this.props.data.radius,
+        center = this.props.data.center,
+        query = [
+          "[out:json];",
+          "way[highway](around:" + radius + "," + center.geometry.coordinates.reverse().join(",") + ");",
+          "(._;>;);",
+          "out;"
+        ].join("\n");
+
+
+    this.query = query;
+
     return (
       <section>
-        Intro
+        <div className="container">
+          <div className="row">
+            <h1>Overpass API</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>
+              <textarea id="step-overpass-editor">
+                {this.query}
+              </textarea>
+            </p>
+            <p>
+              <button onClick={this.onButtonClick}>Ok!</button>
+            </p>
+          </div>
+        </div>
       </section>
     )
+  },
+
+  componentDidMount: function() {
+    this.editor = CodeMirror.fromTextArea(document.getElementById("step-overpass-editor"), {
+      lineNumbers: true
+    });
+  },
+
+  onButtonClick: function() {
+    var _this = this;
+
+    query_overpass(this.editor.getValue(), function(error, geojson) {
+      if (error || !geojson.features || geojson.features.length == 0) {
+
+      } else {
+        // Filter out Point features (OSM nodes), and go to next step
+        _this.props.onNextStep({geojson: {
+          type: "FeatureCollection",
+          features: geojson.features.filter(function(feature) {
+            return feature.geometry.type !== "Point";
+          })
+        }});
+      }
+    });
+
   }
 });
 
@@ -111,10 +170,40 @@ var StepGeoJSON = React.createClass({
   render: function() {
     return (
       <section>
-        Intro
+        <div id="step-geojson-map" className="map"/>
       </section>
     )
-  }
+  },
+
+  componentDidMount: function() {
+    var map = L.map('step-geojson-map', {
+        attributionControl: false,
+        minZoom: 14, maxZoom: 17,
+      }),
+      pointStyle = {},
+      lineStyle = {
+        color: "black",
+        weight: 3,
+        opacity: 0.65
+      },
+      tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      tileLayer = L.tileLayer(tileUrl, {
+        opacity: 0.3
+      }).addTo(map),
+      geojsonLayer = new L.geoJson(this.props.data.geojson, {
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, pointStyle);
+        }
+      }
+      ).addTo(map);
+
+    map.fitBounds(geojsonLayer.getBounds());
+
+    map.touchZoom.disable();
+    map.scrollWheelZoom.disable();
+
+    this.map = map;
+  },
 });
 
 

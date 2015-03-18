@@ -16,6 +16,13 @@ section {
   padding: 30px;
 }
 
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+
 /* Step: Introduction
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
@@ -25,12 +32,6 @@ section:nth-child(1) {
 
 /* Step: Map
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-
-#step-map-map {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
 
 #step-map-hole {
   position: absolute;
@@ -47,7 +48,6 @@ section:nth-child(1) {
 #step-map-button {
   position: absolute;
   width: 100%;
-  height: 100%;
 }
 
 /* Step: Overpass API
@@ -55,4 +55,8 @@ section:nth-child(1) {
 
 section:nth-child(3) {
   background-color: #919ff2;
+}
+
+.CodeMirror {
+  height: 230px;
 }
