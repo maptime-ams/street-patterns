@@ -25,15 +25,26 @@ section {
 .button-bottom {
   position: absolute;
   bottom: 30px;
+  width: 100%;
 }
 
+.button-bottom button {
+  display: block;
+  margin: 0 auto;
+  z-index: 100;
+}
+
+button {
+  background-color: rgba(255, 255, 255, 1);
+  font-size: inherit;
+  text-transform: none;
+  font-weight: normal;
+}
 
 /* Step: Introduction
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-section:nth-child(1) {
-  background-color: #dfe276;
-}
+
 
 /* Step: Map
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -50,17 +61,9 @@ section:nth-child(1) {
   pointer-events: none;
 }
 
-#step-map-button {
-  position: absolute;
-  width: 100%;
-}
-
 /* Step: Overpass API
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-section:nth-child(3) {
-  background-color: #919ff2;
-}
 
 .CodeMirror {
   height: 122px;
