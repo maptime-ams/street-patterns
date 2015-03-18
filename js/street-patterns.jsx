@@ -59,7 +59,7 @@ var StepIntro = React.createClass({
             <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Following along, and don&#39;t forget to click on all the links to read some background information!</p>
             <p>Beautiful patterns can emerge from a city&#39;s street network (<a href="http://www.fredfeddes.nl/">Fred Feddes</a> told us today that some of the patterns in the streets of Amsterdam are more than a 1000 years old), and by using only open data and open source tools, we can extract those patterns, and visualize and <i>physicalize</i> them.</p>
 
-            <p>This tutorial was made for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
+            <p>This tutorial was made by <a href="http://bertspaan.nl">Bert Spaan</a> for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
           </div>
         </div>
         <div className="button-bottom">
@@ -475,13 +475,15 @@ var StepSVGIntro = React.createClass({
         <div className="container">
           <div className="row">
             <h2>GeoJSON to SVG</h2>
+            <p>Vector graphics software does not understand GeoJSON. Luckily, it&#39;s easy to steal the <a href="http://en.wikipedia.org/wiki/Scalable_Vector_Graphics">SVG shapes</a> produced by <a href="http://leafletjs.com/">Leaflet</a> in the map visualization above. (You can see the SVG element yourself by using your browser&#39;s developer tools and looking for the <code>#step-turf-intersect-map .leaflet-overlay-pane</code> DOM element.)
+            </p>
             <p>
-
+              <img src="images/developer-console.png" />
             </p>
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Show me my SVG!</button>
+          <button onClick={this.onButtonClick}>Steal me my SVG!</button>
         </div>
       </section>
     )
