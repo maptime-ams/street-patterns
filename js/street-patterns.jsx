@@ -55,7 +55,11 @@ var StepIntro = React.createClass({
         <div className="container">
           <div className="row">
             <h1>Maptime Amsterdam #5: Street Patterns</h1>
-            <p>hallotjes</p>
+            <p></p>
+            <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Following along, and don&#39;t forget to click on all the links and read background information!</p>
+            <p>Beautiful patterns can emerge from a city&#39;s street network (<a href="http://www.fredfeddes.nl/">Fred Feddes</a> told us today that some of the patterns in the streets of Amsterdam are more than a 1000 years old), and by using only open data and open source tools, we can extract those patterns, and visualize and <i>physicalize</i> them.</p>
+
+            <p>This tutorial was made for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
           </div>
         </div>
         <div className="button-bottom">
@@ -146,7 +150,7 @@ var StepOverpass = React.createClass({
         coordinates = center.geometry.coordinates,
         query = [
           "[out:json];",
-          "way[highway](around:" + radius + "," + [coordinates[1], coordinates[0]].join(",") + ");",
+          "way[\"highway\"](around:" + radius + "," + [coordinates[1], coordinates[0]].join(",") + ");",
           "(._;>;);",
           "out;"
         ].join("\n");
@@ -157,7 +161,7 @@ var StepOverpass = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h1>Overpass API</h1>
+            <h2>Overpass API</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             <p>
               <textarea id="step-overpass-editor">
@@ -175,7 +179,8 @@ var StepOverpass = React.createClass({
 
   componentDidMount: function() {
     this.editor = CodeMirror.fromTextArea(document.getElementById("step-overpass-editor"), {
-      lineNumbers: true
+      lineNumbers: true,
+      mode: "text/x-csrc"
     });
   },
 
@@ -243,14 +248,6 @@ var StepGeoJSONMap = React.createClass({
     map.touchZoom.disable();
     map.scrollWheelZoom.disable();
 
-    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
-    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
-    //         .html()
-    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
-    //     b64 = btoa(svg);
-    //
-    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
-
     this.map = map;
   },
 
@@ -284,7 +281,7 @@ var StepTurfIntro = React.createClass({
   },
 
   onButtonClick: function() {
-    var roadWidth = 5; // meters
+    var roadWidth = 8; // meters
     // TODO: Start loading anim.
     var union;
     this.props.data.geojson.features.forEach(function(feature, i) {
@@ -342,14 +339,6 @@ var StepTurfBuffer = React.createClass({
     map.touchZoom.disable();
     map.scrollWheelZoom.disable();
 
-    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
-    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
-    //         .html()
-    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
-    //     b64 = btoa(svg);
-    //
-    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
-
     this.map = map;
   },
 
@@ -368,7 +357,7 @@ var StepTurfIntersectIntro = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h1>Cirkeltje!</h1>
+            <h2>Cirkeltje!</h2>
             <p>hallootjes</p>
           </div>
         </div>
@@ -402,9 +391,6 @@ var StepTurfIntersectIntro = React.createClass({
     };
 
     var intersection = turf.intersect(this.props.data.geojson, circle);
-
-
-    // hier intersect berekenen
 
     this.props.onNextStep({
       geojson: intersection
@@ -453,19 +439,22 @@ var StepTurfIntersect = React.createClass({
     map.touchZoom.disable();
     map.scrollWheelZoom.disable();
 
-    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
-    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
-    //         .html()
-    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
-    //     b64 = btoa(svg);
-    //
-    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
-
     this.map = map;
   },
 
   onButtonClick: function() {
-    this.props.onNextStep({});
+    var rect = d3.select("#step-turf-intersect-map .leaflet-overlay-pane svg")[0][0].getBBox(),
+        svgAttrs = 'viewBox="' + [rect.x, rect.y, rect.width, rect.height].join(" ") + '"'
+            + ' height="' + rect.height + '" width="' + rect.width + '"'
+            + ' style="transform: translate(0, 0);"',
+        svg = d3.select("#step-turf-intersect-map .leaflet-overlay-pane")
+            .html()
+            .replace(/<svg .*?>/, '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" ' + svgAttrs + '>'),
+        b64 = btoa(svg);
+
+    this.props.onNextStep({
+      svg: b64
+    });
   }
 });
 
@@ -477,12 +466,12 @@ var StepSVGIntro = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h1>svgintro</h1>
+            <h2>svgintro</h2>
             <p>hallotjes</p>
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>Done!</button>
         </div>
       </section>
     )
@@ -497,12 +486,18 @@ var StepSVG = React.createClass({
   mixins: [StepMixin],
 
   render: function() {
+    var svgSrc = "data:image/svg+xml;base64," + this.props.data.svg;
     return (
       <section>
         <div className="container">
           <div className="row">
-            <h1>svg</h1>
-            <p>hallotjes</p>
+            <h2>SVG</h2>
+            <p>
+              Your SVG file is ready! Right-click the image below and choose <i>Save Image As...</i> (or just <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg' href={svgSrc}>click this link</a> to download the file).
+            </p>
+            <p>
+              <img id="step-svg-img" alt="street-pattern" download='street-pattern.svg' src={svgSrc}/>
+            </p>
           </div>
         </div>
         <div className="button-bottom">
@@ -525,12 +520,9 @@ var StepDone = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h1>Done!</h1>
+            <h2>Done!</h2>
             <p>hallotjes</p>
           </div>
-        </div>
-        <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
         </div>
       </section>
     )
@@ -542,7 +534,7 @@ var StepDone = React.createClass({
 });
 
 var colors = [
-  "#4800e5",
+  "#6d3fea", //"#4800e5",
   "#8000e1",
   "#b600de",
   "#db00cc",
