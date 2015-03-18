@@ -21,25 +21,7 @@
 // LANDUSE & LANDCOVER COLORS
 // =====================================================================
 
-@land:              #E8E0D8;
-@water:             #73B6E6;
-@grass:             #E1EBB0;
-@sand:              #F7ECD2;
-@rock:              #D8D7D5;
-@park:              #C8DF9F;
-@cemetery:          #D5DCC2;
-@wood:              #B0C89F;
-@industrial:        #DDDCDC;
-@agriculture:       #EAE0D0;
-@snow:              #EDE5DD;
-@crop:              #E9E5C2;
-@building:          darken(@land, 8);
-@hospital:          #F2E3E1;
-@school:            #F2EAB8;
-@pitch:             #CAE6A9;
-@sports:            @park;
-
-@parking:           fadeout(@road_fill, 75%);
+@water:  rgba(255, 255, 255, 0.4);
 
 // =====================================================================
 // ROAD COLORS
@@ -97,16 +79,16 @@
 // at once or override each individually.
 @place_halo:        #fff;
 
-@country_text:      @land * 0.2;
+@country_text:      black * 0.2;
 @country_halo:      @place_halo;
 
 @state_text:        #666;
 @state_halo:        @place_halo;
 
-@city_text:         @land * 0.1;
+@city_text:         black * 0.1;
 @city_halo:         @place_halo;
 
-@town_text:         @land * 0.2;
+@town_text:         black * 0.2;
 @town_halo:         @place_halo;
 
 @poi_text:          @poi_text;  
@@ -114,7 +96,7 @@
 @road_text:         #666;
 @road_halo:         #fff;
 
-@other_text:        darken(@land,50)*0.8;
+@other_text:        darken(black,50)*0.8;
 @other_halo:        @place_halo;
 
 @locality_text:     #aaa;

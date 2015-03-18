@@ -452,10 +452,10 @@
     text-size: 11;
     text-wrap-width: 50;
     text-wrap-before: true;
-    text-halo-fill: #fff;
+    text-halo-fill: @road_halo;
     text-line-spacing: -2;
     text-face-name: @sans_italic;
-    text-fill: @water * 0.75;
+    text-fill: @road_text * 0.75;
   }
   [zoom>=14][area>3200000],
   [zoom>=15][area>800000],
@@ -493,8 +493,8 @@
   text-avoid-edges: true;
   text-name: @name;
   text-face-name: @sans_italic;
-  text-fill: @water * 0.75;
-  text-halo-fill: fadeout(#fff,80%);
+  text-fill: @road_text;
+  text-halo-fill: @road_fill;
   text-halo-radius: 1.5;
   text-halo-rasterizer: fast;
   text-placement: line;
@@ -521,29 +521,6 @@
 // =====================================================================
 // 5__ ROAD LABELS
 // =====================================================================
-
-// highway shield
-#road_label[class='motorway'][reflen>0][reflen<=6],
-#road_label[class='main'][reflen>0][reflen<=6] {
-  shield-name: "[ref]";
-  shield-size: 9;
-  shield-file: url('img/shield/generic-sm-[reflen].png');
-  shield-face-name: @sans_bold;
-  shield-fill: #555;
-  shield-spacing: 200;
-  shield-avoid-edges: true;
-  // Workaround for Mapnik bug where shields are placed slightly over the
-  // edge even when avoid-edges is true:
-  shield-min-padding: 5;
-  shield-min-distance: 40;
-  [zoom>=12] { shield-min-distance: 50; }
-  [zoom>=14] {
-    shield-spacing: 400;
-    shield-min-distance: 80;
-    shield-size: 11;
-    shield-file: url('img/shield/generic-md-[reflen].png');
-  }
-}
 
 // regular labels
 #road_label['mapnik::geometry_type'=2] {
@@ -609,23 +586,3 @@
   }
 }
 
-// =====================================================================
-// ADDRESS LABELS
-// =====================================================================
-
-#housenum_label[zoom>=18] {
-  text-name:'[house_num]';
-  text-face-name: @sans_lt_italic;
-  text-fill: darken(@building, 20%);
-  text-wrap-width: 50;
-  text-wrap-before: true;
-  text-placement:point;
-  text-size: 9;
-  [zoom>=19] {
-    text-size: 11;
-    text-character-spacing: -0.5;
-  }
-}
-
-
-/**/

@@ -169,7 +169,7 @@
 #bridge::fill['mapnik::geometry_type'=2],
 #tunnel['mapnik::geometry_type'=2] {
   [class='path'][zoom>=14] {
-    m/line-color: @land;
+    m/line-color: @path_line;
     m/line-width: 1 + 1;
     [zoom>=15] { m/line-width: 1.2 + 1; }
     [zoom>=16] { m/line-width: 1.4 + 1; }
@@ -400,7 +400,7 @@
     line-width: 1.8;
     [zoom=16] { line-width: 2; }
     [zoom>=17] { line-width: 2; }
-    polygon-fill: @land;
+    polygon-fill: @road_fill;
   }
 }
 #tunnel[class='street_limited'][zoom>=14]['mapnik::geometry_type'=2] {
@@ -477,7 +477,7 @@
 #tunnel[zoom>=13] {
   ['mapnik::geometry_type'=2] {
     // colors & styles
-    m/line-color: @land;
+    m/line-color: @road_line;
     m/line-join: round;
     // widths
     [zoom=13] {
@@ -643,7 +643,7 @@
 #bridge::fill[class='major_rail'][zoom>=13],
 #bridge::fill[class='minor_rail'][zoom>=15] {
   ['mapnik::geometry_type'=2] {
-    m/line-color: @land;
+    m/line-color: @road_line;
     [zoom=13] { m/line-width: 0.8 + 1; }
     [zoom=14] { m/line-width: 1 + 1; }
     [zoom=15] { m/line-width: 1.5 + 1; }

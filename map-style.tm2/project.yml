@@ -1,5 +1,6 @@
 _prefs: 
   baselayer: ''
+  mapid: bertspaan.ccb08263
   saveCenter: false
 _properties: 
   bridge: 
@@ -11,9 +12,9 @@ bounds:
   - 180
   - 85
 center: 
-  - 0
-  - 0
-  - 3
+  - 4.8987
+  - 52.3723
+  - 16
 description: ''
 format: "png8:m=h:c=64"
 interactivity_layer: ''
@@ -43,14 +44,13 @@ layers:
   - waterway_label
   - housenum_label
   - contour.label
-maxzoom: 19
-minzoom: 0
-name: Streets
+maxzoom: 18
+minzoom: 10
+name: Street Patterns
 source: "mapbox:///mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v5"
 styles: 
   - vars.mss
   - bg.mss
   - road.mss
   - label.mss
-  - poi_classic.mss
 template: ''
