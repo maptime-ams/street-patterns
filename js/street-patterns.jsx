@@ -56,7 +56,7 @@ var StepIntro = React.createClass({
           <div className="row">
             <h1>Maptime Amsterdam #5: Street Patterns</h1>
             <p></p>
-            <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Following along, and don&#39;t forget to click on all the links and read background information!</p>
+            <p>This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Following along, and don&#39;t forget to click on all the links to read some background information!</p>
             <p>Beautiful patterns can emerge from a city&#39;s street network (<a href="http://www.fredfeddes.nl/">Fred Feddes</a> told us today that some of the patterns in the streets of Amsterdam are more than a 1000 years old), and by using only open data and open source tools, we can extract those patterns, and visualize and <i>physicalize</i> them.</p>
 
             <p>This tutorial was made for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.</p>
@@ -83,7 +83,7 @@ var StepMap = React.createClass({
         <div id="step-map-map" className="map"/>
         <div id="step-map-hole" />
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Yes, give me these streets!</button>
+          <button onClick={this.onButtonClick}>Yes, I like this street pattern!</button>
         </div>
         <div className="input-top">
           <input type="search" placeholder="Search location..." id="step-map-geocode" onKeyUp={this.onGeocode}/>
@@ -118,7 +118,6 @@ var StepMap = React.createClass({
       var value = d3.select("#step-map-geocode").property('value');
       d3.json("http://nominatim.openstreetmap.org/?format=json&q=" + value + "&format=json&limit=1", function(error, data) {
         if (data[0] && data[0].lat) {
-
           _this.map.panTo([data[0].lat, data[0].lon]);
         }
       });
@@ -161,8 +160,14 @@ var StepOverpass = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h2>Overpass API</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h2>Get OpenStreetMap data with the Overpass API</h2>
+            <p><a href="http://www.openstreetmap.org/">OpenStreetMap</a> is an amazing source of geographic data. Make sure to sign up for an account, and try the <a href="http://ideditor.com/">iD editor</a> to see how easy it is to edit the map yourself. You can use OSM to make maps (for example, with <a href="https://www.mapbox.com/mapbox-studio/">Mapbox Studio</a>), but you can also extract a subset of the data a do with it whatever you like. This tuturial just uses OSM&#39;s <a href="http://wiki.openstreetmap.org/wiki/Key:highway"><code>highway</code> tags</a> (which represent road data in OSM).</p>
+
+            <p>There are multiple ways to download OpenStreetMap data. For example, you can use <a href="https://mapzen.com/metro-extracts/">Mapzen Metro Extracts</a> if you need data for larger metropolitan areas, or use the <a href="http://overpass-api.de/">Overpass API</a> to query and download a specific subset of the data. <a href="http://overpass-turbo.eu/">Overpass Turbo</a> allows you to test and play with the Overpass API. This tutorial uses <a href="https://github.com/tyrasd/osmtogeojson">osmtogeojson</a>, a JavaScript module to convert Overpass API results to <a href="http://geojson.io">GeoJSON</a>.
+            </p>
+            <p>
+            If you press Execute, the query below is sent to the Overpass API. You can use <a href="http://overpass-turbo.eu/">Overpass Turbo</a> to test the query yourself.
+            </p>
             <p>
               <textarea id="step-overpass-editor">
                 {this.query}
@@ -171,7 +176,7 @@ var StepOverpass = React.createClass({
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>Execute!</button>
         </div>
       </section>
     )
@@ -216,7 +221,7 @@ var StepGeoJSONMap = React.createClass({
       <section>
         <div id="step-geojson-map" className="map"/>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Hopsa!</button>
+          <button onClick={this.onButtonClick}>Next!</button>
         </div>
       </section>
     )
@@ -259,8 +264,6 @@ var StepGeoJSONMap = React.createClass({
 });
 
 
-
-
 var StepTurfIntro = React.createClass({
   mixins: [StepMixin],
 
@@ -269,12 +272,15 @@ var StepTurfIntro = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h2>Turf!</h2>
-            <p>Hier komt turf! Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h2>Turf - geospatial functions with JavaScript!</h2>
+            <p>
+              The GeoJSON OpenStreetMap results from the Overpass API are only <a href="http://geojson.org/geojson-spec.html#linestring">line data</a>. We can use <a href="http://turfjs.org/">Turf</a>&#39;s <a href="http://turfjs.org/static/docs/module-turf_buffer.html"><code>buffer</code> function</a> to compute an area around all the lines, and convert the line data to polygons.
+            </p>
+            <p><b>Turf is great!</b> No need for expensive or complicated GIS software, with Turf you can run all sorts of geospatial functions directly in your browser. Online documentation and tutorials are available on <a href="http://turfjs.org/learn.html">Turf&#39;s website.</a></p>
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>Compute!</button>
         </div>
       </section>
     )
@@ -307,7 +313,7 @@ var StepTurfBuffer = React.createClass({
       <section>
         <div id="step-turf-buffer-map" className="map"/>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Hopsa!</button>
+          <button onClick={this.onButtonClick}>Next!</button>
         </div>
       </section>
     )
@@ -357,12 +363,14 @@ var StepTurfIntersectIntro = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h2>Cirkeltje!</h2>
-            <p>hallootjes</p>
+            <h2>No more messy lines</h2>
+            <p>
+              That looked pretty good, we&#39;re almost ready. We just want our circle back! Turf has a <a href="http://turfjs.org/static/docs/module-turf_intersect.html"><code>intersect</code> function</a> which we can use to compute the <a href="http://en.wikipedia.org/wiki/Boolean_operations_on_polygons">boolean intersection</a> of our buffered road lines and a circular polygon.
+            </p>
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>I want my circle!</button>
         </div>
       </section>
     )
@@ -407,7 +415,7 @@ var StepTurfIntersect = React.createClass({
       <section>
         <div id="step-turf-intersect-map" className="map"/>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Hopsa!</button>
+          <button onClick={this.onButtonClick}>Yeah!</button>
         </div>
       </section>
     )
@@ -466,12 +474,14 @@ var StepSVGIntro = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h2>svgintro</h2>
-            <p>hallotjes</p>
+            <h2>GeoJSON to SVG</h2>
+            <p>
+
+            </p>
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Done!</button>
+          <button onClick={this.onButtonClick}>Show me my SVG!</button>
         </div>
       </section>
     )
@@ -501,7 +511,7 @@ var StepSVG = React.createClass({
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>Next!</button>
         </div>
       </section>
     )
@@ -520,8 +530,10 @@ var StepDone = React.createClass({
       <section>
         <div className="container">
           <div className="row">
-            <h2>Done!</h2>
-            <p>hallotjes</p>
+            <h2>To the Fablab!</h2>
+            <p>Now you can open and edit the SVG file with a vector graphics editor, e.g. <a href="http://www.adobe.com/products/illustrator.html">Adobe Illustrator</a> or <a href="https://inkscape.org/en/">Inkscape</a> (Inkscape is free and open source!). To produce good results with the Fablab&#39;s <a href="http://fablab.waag.org/machine/laser-cutter">laser cutter</a> or <a href="http://fablab.waag.org/machine/vinyl-cutter">vinyl cutter</a>, you usually need to tweak with the SVG&#39;s dimensions and line widths.</p>
+            <p><b>This is the end of this tutorial - bring your final SVG file to the Fablab and start making!</b>
+            </p>
           </div>
         </div>
       </section>
