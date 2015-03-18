@@ -26,3 +26,16 @@ function query_overpass(query, cb) {
         }
       });
 };
+
+function addTileLayer(map, opacity) {
+  if (!opacity) {
+    opacity = 1;
+  }
+
+  var mapId = "bertspaan.ccb08263",
+      accessToken = 'pk.eyJ1IjoiYmVydHNwYWFuIiwiYSI6ImR3dERiQk0ifQ.DLbScmbRohc3Sqv7prfhqw',
+      tileUrl = "https://{s}.tiles.mapbox.com/v4/" + mapId + "/{z}/{x}/{y}.png?access_token=" + accessToken,
+      tileLayer = L.tileLayer(tileUrl, {
+        opacity: opacity
+      }).addTo(map);
+}

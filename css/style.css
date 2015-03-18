@@ -41,6 +41,10 @@ button {
   font-weight: normal;
 }
 
+.leaflet-container {
+  background: none;
+}
+
 /* Step: Introduction
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 

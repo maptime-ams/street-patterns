@@ -19,7 +19,15 @@ var Steps = React.createClass({
   },
 
   onNextStep: function(index, data) {
-    var stepData = this.props.stepData.slice(0, index + 1);
+    var stepData = this.props.stepData.slice(0, index + 1),
+        lastStepData = stepData[stepData.length - 1];
+
+    for (var attrname in lastStepData) {
+      if (!data[attrname]) {
+        data[attrname] = lastStepData[attrname];
+      }
+    }
+
     stepData.push(data);
     this.setProps({stepData: stepData});
 
@@ -37,7 +45,6 @@ var StepMixin = {
     React.findDOMNode(this).style.backgroundColor = this.props.backgroundColor;
   }
 }
-
 
 var StepIntro = React.createClass({
   mixins: [StepMixin],
@@ -86,15 +93,22 @@ var StepMap = React.createClass({
         zoom: 17,
         center: [52.3404,4.9431]
       }),
-      tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      tileLayer = L.tileLayer(tileUrl).addTo(map),
       hash = new L.Hash(map);
+
+    addTileLayer(map);
 
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
     map.scrollWheelZoom.disable();
 
     this.map = map;
+  },
+
+  onGeoCode: function() {
+    // _this = this;
+    // d3.json(http://nominatim.openstreetmap.org/?format=json&addressdetails=1&q=albrechtlaan,bussum&format=json&limit=1, function(data) {
+    //   _this.map.setCenter()
+    // })
   },
 
   onButtonClick: function() {
@@ -179,7 +193,7 @@ var StepOverpass = React.createClass({
   }
 });
 
-var StepGeoJSON = React.createClass({
+var StepGeoJSONMap = React.createClass({
   mixins: [StepMixin],
 
   render: function() {
@@ -200,14 +214,10 @@ var StepGeoJSON = React.createClass({
       }),
       pointStyle = {},
       lineStyle = {
-        color: this.props.backgroundColor,
-        weight: 10,
+        color: "black",
+        weight: 3,
         opacity: 1
       },
-      tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      tileLayer = L.tileLayer(tileUrl, {
-        opacity: 0.2
-      }).addTo(map),
       geojsonLayer = new L.geoJson(this.props.data.geojson, {
         style: lineStyle,
         pointToLayer: function (feature, latlng) {
@@ -215,6 +225,8 @@ var StepGeoJSON = React.createClass({
         }
       }
       ).addTo(map);
+
+    addTileLayer(map, 0.3);
 
     map.fitBounds(geojsonLayer.getBounds());
 
@@ -233,38 +245,329 @@ var StepGeoJSON = React.createClass({
   },
 
   onButtonClick: function() {
-
+    this.props.onNextStep({
+      geojson: this.props.data.geojson
+    });
   }
 });
 
 
-// #8dd3c7
-// #ffffb3
-// #bebada
-// #fb8072
-// #80b1d3
-// #fdb462
-// #b3de69
-// #fccde5
-// #d9d9d9
-// #bc80bd
-// #ccebc5
-// #ffed6f
+
+
+var StepTurfIntro = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h2>Turf!</h2>
+            <p>Hier komt turf! Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
+        </div>
+      </section>
+    )
+  },
+
+  onButtonClick: function() {
+    var roadWidth = 5; // meters
+    // TODO: Start loading anim.
+    var union;
+    this.props.data.geojson.features.forEach(function(feature, i) {
+      var buffered = turf.buffer(feature, roadWidth, 'meters').features[0];
+      if (union) {
+        union = turf.union(buffered, union);
+      } else {
+        union = buffered;
+      }
+    });
+
+    this.props.onNextStep({
+      geojson: union
+    });
+  }
+});
+
+var StepTurfBuffer = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div id="step-turf-buffer-map" className="map"/>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Hopsa!</button>
+        </div>
+      </section>
+    )
+  },
+
+  componentDidMount: function() {
+    var map = L.map('step-turf-buffer-map', {
+        attributionControl: false,
+        minZoom: 14, maxZoom: 17,
+      }),
+      pointStyle = {},
+      lineStyle = {
+        color: "black",
+        weight: 3,
+        opacity: 1
+      },
+      geojsonLayer = new L.geoJson(this.props.data.geojson, {
+        style: lineStyle,
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, pointStyle);
+        }
+      }
+      ).addTo(map);
+
+    addTileLayer(map, 0.3);
+
+    map.fitBounds(geojsonLayer.getBounds());
+
+    map.touchZoom.disable();
+    map.scrollWheelZoom.disable();
+
+    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
+    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
+    //         .html()
+    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
+    //     b64 = btoa(svg);
+    //
+    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
+
+    this.map = map;
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({
+      geojson: this.props.data.geojson
+    });
+  }
+});
+
+var StepTurfIntersectIntro = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h1>Cirkeltje!</h1>
+            <p>hallootjes</p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
+        </div>
+      </section>
+    )
+  },
+
+  onButtonClick: function() {
+    var _this = this,
+        angles = [];
+
+    for (var a = 0; a <= 360; a++) {
+      angles.push(a);
+    }
+    console.log(_this.props.data)
+
+    var circle = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          angles.map(function(a) {
+            var point = turf.destination(_this.props.data.center, _this.props.data.radius / 1000, a, "kilometers");
+            return point.geometry.coordinates;
+          })
+        ]
+      }
+    };
+
+    var intersection = turf.intersect(this.props.data.geojson, circle);
+
+
+    // hier intersect berekenen
+
+    this.props.onNextStep({
+      geojson: intersection
+    });
+  }
+});
+
+
+var StepTurfIntersect = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div id="step-turf-intersect-map" className="map"/>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Hopsa!</button>
+        </div>
+      </section>
+    )
+  },
+
+  componentDidMount: function() {
+    var map = L.map('step-turf-intersect-map', {
+        attributionControl: false,
+        minZoom: 14, maxZoom: 17,
+      }),
+      pointStyle = {},
+      lineStyle = {
+        color: "black",
+        weight: 3,
+        opacity: 1
+      },
+      geojsonLayer = new L.geoJson(this.props.data.geojson, {
+        style: lineStyle,
+        pointToLayer: function (feature, latlng) {
+          return L.circleMarker(latlng, pointStyle);
+        }
+      }
+      ).addTo(map);
+
+    addTileLayer(map, 0.3);
+
+    map.fitBounds(geojsonLayer.getBounds());
+
+    map.touchZoom.disable();
+    map.scrollWheelZoom.disable();
+
+    // <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
+    // var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
+    //         .html()
+    //         .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
+    //     b64 = btoa(svg);
+    //
+    // d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
+
+    this.map = map;
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({});
+  }
+});
+
+var StepSVGIntro = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h1>svgintro</h1>
+            <p>hallotjes</p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
+        </div>
+      </section>
+    )
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({});
+  }
+});
+
+var StepSVG = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h1>svg</h1>
+            <p>hallotjes</p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
+        </div>
+      </section>
+    )
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({});
+  }
+});
+
+var StepDone = React.createClass({
+  mixins: [StepMixin],
+
+  render: function() {
+    return (
+      <section>
+        <div className="container">
+          <div className="row">
+            <h1>Done!</h1>
+            <p>hallotjes</p>
+          </div>
+        </div>
+        <div className="button-bottom">
+          <button onClick={this.onButtonClick}>Ok!</button>
+        </div>
+      </section>
+    )
+  },
+
+  onButtonClick: function() {
+    this.props.onNextStep({});
+  }
+});
+
+
+
+var colors = [
+  "#67001f",
+  "#b2182b",
+  "#d6604d",
+  "#f4a582",
+  "#fddbc7",
+  "#f7f7f7",
+  "#d1e5f0",
+  "#92c5de",
+  "#4393c3",
+  "#2166ac",
+  "#053061"
+];
 
 var steps = [
-  { component: StepIntro, props: { backgroundColor: "#8dd3c7" } },
-  { component: StepMap, props: { backgroundColor: "#ffffb3" } },
-  { component: StepOverpass, props: { backgroundColor: "#bebada" } },
-  //{ component: StepGeoOverpassData, props: { backgroundColor: "#fb8072" } },
-  { component: StepGeoJSON, props: { backgroundColor: "#80b1d3" } },
-  //StepGeoJSONMap
-  // StepTurfIntro
-  // StepBuffer
-  // StepIntersect
-  // StepSVGIntro
-  // StepSVG
-  // StepDone
+  { component: StepIntro, props: {  } },
+  { component: StepMap, props: { } },
+  { component: StepOverpass, props: { } },
+  //{ component: StepGeoOverpassData, props: { } },
+  //StepGeoJSON
+  { component: StepGeoJSONMap, props: { } },
+  { component: StepTurfIntro, props: { } },
+  { component: StepTurfBuffer, props: { } },
+  { component: StepTurfIntersectIntro, props: { } },
+  { component: StepTurfIntersect, props: { } },
+  { component: StepSVGIntro, props: { } },
+  { component: StepSVG, props: { } },
+  { component: StepDone, props: { } }
 ];
+
+steps = steps.map(function(step, index) {
+  step.props.backgroundColor = colors[index];
+  return step;
+});
 
 var stepData = [
   {}
