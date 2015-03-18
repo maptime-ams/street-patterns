@@ -22,6 +22,11 @@ section {
   height: 100%;
 }
 
+.button-bottom {
+  position: absolute;
+  bottom: 30px;
+}
+
 
 /* Step: Introduction
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -58,5 +63,5 @@ section:nth-child(3) {
 }
 
 .CodeMirror {
-  height: 230px;
+  height: 122px;
 }

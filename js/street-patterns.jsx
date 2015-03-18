@@ -171,6 +171,12 @@ var StepGeoJSON = React.createClass({
     return (
       <section>
         <div id="step-geojson-map" className="map"/>
+        <div id="step-geojson-button" className="button-bottom">
+          <div className="row">
+            <button onClick={this.onButtonClick}>Hopsa!</button>
+            <a id="step-geojson-download" href-lang='image/svg+xml' title='street-pattern.svg'>Download</a>
+          </div>
+        </div>
       </section>
     )
   },
@@ -202,8 +208,19 @@ var StepGeoJSON = React.createClass({
     map.touchZoom.disable();
     map.scrollWheelZoom.disable();
 
+    var svg = d3.select("#step-geojson-map .leaflet-overlay-pane")
+            .html()
+            .replace("<svg", '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"'),
+        b64 = btoa(svg);
+
+    d3.select("#step-geojson-download").attr("href", "data:image/svg+xml;base64,\n" + b64);
+
     this.map = map;
   },
+
+  onButtonClick: function() {
+
+  }
 });
 
 
@@ -211,8 +228,10 @@ var steps = [
   StepIntro,
   StepMap,
   StepOverpass,
-  StepGeoJSON
-  // StepTurf
+  StepGeoJSON,
+  //StepGeoJSONMap
+  // StepBuffer
+  // StepIntersect
   // StepSVG
   // StepDone
 ];
