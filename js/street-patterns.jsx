@@ -59,7 +59,7 @@ var StepIntro = React.createClass({
           </div>
         </div>
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Ok!</button>
+          <button onClick={this.onButtonClick}>OK, let&#39;s start!</button>
         </div>
       </section>
     )
@@ -79,7 +79,10 @@ var StepMap = React.createClass({
         <div id="step-map-map" className="map"/>
         <div id="step-map-hole" />
         <div className="button-bottom">
-          <button onClick={this.onButtonClick}>Yes, I like these streets!</button>
+          <button onClick={this.onButtonClick}>Yes, give me these streets!</button>
+        </div>
+        <div className="input-top">
+          <input type="search" placeholder="Search location..." id="step-map-geocode" onKeyUp={this.onGeocode}/>
         </div>
       </section>
     )
@@ -104,11 +107,18 @@ var StepMap = React.createClass({
     this.map = map;
   },
 
-  onGeoCode: function() {
-    // _this = this;
-    // d3.json(http://nominatim.openstreetmap.org/?format=json&addressdetails=1&q=albrechtlaan,bussum&format=json&limit=1, function(data) {
-    //   _this.map.setCenter()
-    // })
+  onGeocode: function(e) {
+    var _this = this;
+
+    if (e.keyCode == 13) {
+      var value = d3.select("#step-map-geocode").property('value');
+      d3.json("http://nominatim.openstreetmap.org/?format=json&q=" + value + "&format=json&limit=1", function(error, data) {
+        if (data[0] && data[0].lat) {
+
+          _this.map.panTo([data[0].lat, data[0].lon]);
+        }
+      });
+    }
   },
 
   onButtonClick: function() {
@@ -376,7 +386,6 @@ var StepTurfIntersectIntro = React.createClass({
     for (var a = 0; a <= 360; a++) {
       angles.push(a);
     }
-    console.log(_this.props.data)
 
     var circle = {
       type: "Feature",
@@ -532,24 +541,24 @@ var StepDone = React.createClass({
   }
 });
 
-
-
 var colors = [
-  "#67001f",
-  "#b2182b",
-  "#d6604d",
-  "#f4a582",
-  "#fddbc7",
-  "#f7f7f7",
-  "#d1e5f0",
-  "#92c5de",
-  "#4393c3",
-  "#2166ac",
-  "#053061"
+  "#4800e5",
+  "#8000e1",
+  "#b600de",
+  "#db00cc",
+  "#d80093",
+  "#d5005b",
+  "#d20025",
+  "#ce0e00",
+  "#cb4100",
+  "#c87200",
+  "#c5a100",
+  "#b4c200",
+  "#82bf00"
 ];
 
 var steps = [
-  { component: StepIntro, props: {  } },
+  { component: StepIntro, props: { color: "white"  } },
   { component: StepMap, props: { } },
   { component: StepOverpass, props: { } },
   //{ component: StepGeoOverpassData, props: { } },
