@@ -72,10 +72,21 @@
 }
 
 @font-face {
-  font-family: 'Bree Serif';
-  src: url("../fonts/BreeSerif-Regular.otf");
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Regular.ttf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Bold.ttf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url("../fonts/Lato-Black.ttf");
   font-weight: 800;
-  font-style: italic;
 }
 
 /* Base styles
@@ -89,7 +100,16 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   color: rgb(34, 34, 34);
-  font-family: "Bree Serif", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-family: "Lato", "Open Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-weight: 800;
+}
+
+a, a:visited {
+  color: rgb(34, 34, 34);
 }
 
 #steps {
@@ -178,4 +198,12 @@ h1, h2 {
 
 .CodeMirror {
   height: 122px;
+}
+
+/* Step: SVG
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+#step-svg-img {
+  display: block;
+  margin: 0 auto;
 }
