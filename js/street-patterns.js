@@ -578,7 +578,9 @@ var StepDone = React.createClass({displayName: "StepDone",
             React.createElement("h2", null, "To the Fablab!"), 
             React.createElement("p", null, "Now you can open and edit the SVG file with a vector graphics editor, e.g. ", React.createElement("a", {href: "http://www.adobe.com/products/illustrator.html"}, "Adobe Illustrator"), " or ", React.createElement("a", {href: "https://inkscape.org/en/"}, "Inkscape"), " (Inkscape is free and open source!). To produce good results with the Fablab's ", React.createElement("a", {href: "http://fablab.waag.org/machine/laser-cutter"}, "laser cutter"), " or ", React.createElement("a", {href: "http://fablab.waag.org/machine/vinyl-cutter"}, "vinyl cutter"), ", you usually need to tweak with the SVG's dimensions and line widths."), 
             React.createElement("p", null, 
-              React.createElement("b", null, "This is the end of this tutorial - bring your final SVG file to the Fablab and start making!"), 
+              React.createElement("b", null, "This is the end of this tutorial - bring your final SVG file to the Fablab and start making!")
+            ), 
+            React.createElement("p", null, 
               React.createElement("img", {src: "images/budapest.jpg"})
             )
           )
