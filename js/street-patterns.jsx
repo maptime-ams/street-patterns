@@ -577,7 +577,9 @@ var StepDone = React.createClass({
           <div className="row">
             <h2>To the Fablab!</h2>
             <p>Now you can open and edit the SVG file with a vector graphics editor, e.g. <a href="http://www.adobe.com/products/illustrator.html">Adobe Illustrator</a> or <a href="https://inkscape.org/en/">Inkscape</a> (Inkscape is free and open source!). To produce good results with the Fablab&#39;s <a href="http://fablab.waag.org/machine/laser-cutter">laser cutter</a> or <a href="http://fablab.waag.org/machine/vinyl-cutter">vinyl cutter</a>, you usually need to tweak with the SVG&#39;s dimensions and line widths.</p>
-            <p><b>This is the end of this tutorial - bring your final SVG file to the Fablab and start making!</b>
+            <p>
+              <b>This is the end of this tutorial - bring your final SVG file to the Fablab and start making!</b>
+              <img src="images/budapest.jpg" />
             </p>
           </div>
         </div>
