@@ -1,6 +1,6 @@
 # Maptime Amsterdam #5: Street Patterns
 
-[Take me to the tutorial](http://maptime-ams.github.io/street-patterns/)!
+__[Take me to the tutorial](http://maptime-ams.github.io/street-patterns/)!__
 
 This is a tutorial on using <a href="http://wiki.openstreetmap.org/wiki/Key:highway">OpenStreetMap road data</a> to make <a href="http://dataphys.org/">physical visualizations</a> using <a href="http://fablab.waag.org/machines">Fablab equipment</a>. Follow along, and don&#39;t forget to click on all the links to read some background information!
 
