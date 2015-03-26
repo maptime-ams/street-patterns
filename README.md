@@ -8,7 +8,7 @@ Beautiful patterns can emerge from a city&#39;s street network (<a href="http://
 
 This tutorial was made by <a href="http://bertspaan.nl">Bert Spaan</a> for the <a href="http://www.meetup.com/Maptime-AMS/events/220184211/">fifth edition</a> of <a href="http://maptime-ams.github.io/">Maptime Amsterdam</a>, and should work with Chrome, Firefox and Safari. The source code is available on <a href="https://github.com/maptime-ams/street-patterns">GitHub</a>.
 
-![Budapest](images/budapest.png)
+![Budapest](images/budapest.jpg)
 
 ![Betondorp](images/betondorp.png)
 
